@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">LearningEnglish</string>
+
+    <string name="signIn_button">Вход</string>
+    <string name="reg_button">Регистрация</string>
+    <string name="welcome_text">Поиграем?</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="playGame_button">Играть</string>
+    <string name="lk_button">Личный кабинет</string>
+    <string name="add_button">Добавить слова</string>
+    <string name="back">Назад</string>
+    <string name="exitAcc">Выход из аккаунта</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BigButton">
+
+        <item name="android:backgroundTint">@color/colorAccent</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_margin">@dimen/activity_vertical_margin</item>
+        <item name="android:textColor">@color/colorTextLight</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:padding">@dimen/activity_horizontal_margin</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="MyTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/colorTextLight</item>
+    </style>
+</resources>

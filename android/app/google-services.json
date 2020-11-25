@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "487362880174",
+    "firebase_url": "https://learningenglish-cdbfa.firebaseio.com",
+    "project_id": "learningenglish-cdbfa",
+    "storage_bucket": "learningenglish-cdbfa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487362880174:android:d0cb5ffc2d211f0902433f",
+        "android_client_info": {
+          "package_name": "com.example.learningenglish"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "487362880174-ub3mhqs04s28m3i2u90l71ikvb6jr2sj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.learningenglish",
+            "certificate_hash": "f8e397ede1f1376b05f619b775fe2d5f54ed04b6"
+          }
+        },
+        {
+          "client_id": "487362880174-fe6glcubdtfs8c13rtiplmmqpmq2ekkh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWExNeHxW9bbZgEbTaBmrJvQuJsZJXGpA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "487362880174-fe6glcubdtfs8c13rtiplmmqpmq2ekkh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

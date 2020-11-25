@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_start"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="bottom"
+    android:background="@drawable/fon"
+    android:orientation="vertical"
+    tools:context=".PlayGame">
+
+
+    <ImageButton
+        android:id="@+id/someBtnId"
+        android:layout_width="60sp"
+        android:layout_height="60sp"
+
+        android:scaleType="fitCenter"
+        android:padding="0px"
+        android:src="@drawable/heart"
+        android:layout_alignParentRight="true" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/word"
+            android:layout_width="match_parent"
+            android:layout_height="364dp"
+            android:fontFamily="@font/fontdiner_swanky"
+            android:gravity="center"
+            android:text="TextView"
+            android:textColor="#0C002C"
+            android:textSize="30sp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="81dp"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="20dp">
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+>
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:background="@color/white"
+                    android:hint="Введите перевод"
+                    android:textColor="#0C002C" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/next"
+                style="@style/BaseButton"
+                android:layout_width="match_parent"
+                android:layout_height="62dp"
+                android:layout_margin="100dp"
+                android:text="Далее" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

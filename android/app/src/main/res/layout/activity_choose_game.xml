@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:weightSum="100">
+
+    <Button
+        android:id="@+id/oneFour"
+        android:layout_width="match_parent"
+        android:layout_height="692dp"
+        android:layout_weight="50"
+        android:background="@drawable/choice" />
+
+    <Button
+        android:id="@+id/writeAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="651dp"
+        android:layout_weight="50"
+        android:background="@drawable/another" />
+</LinearLayout>
