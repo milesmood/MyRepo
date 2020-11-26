@@ -52,7 +52,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/fontdiner_swanky"
-                android:text="Button"
+              
                 android:textColor="#FFFFFF" />
 
             <Button
@@ -63,7 +63,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/fontdiner_swanky"
-                android:text="Button" />
+                 />
         </LinearLayout>
 
         <LinearLayout
@@ -82,7 +82,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/fontdiner_swanky"
-                android:text="Button" />
+               />
 
             <Button
                 android:id="@+id/var4"
@@ -92,7 +92,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/fontdiner_swanky"
-                android:text="Button" />
+                 />
         </LinearLayout>
 
         <LinearLayout
