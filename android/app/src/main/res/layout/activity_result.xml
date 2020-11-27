@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_start"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="bottom"
+    android:background="@drawable/fon"
+    android:orientation="vertical"
+    tools:context=".SecondActivity">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:padding="30dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/eng_img" />
+
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:fontFamily="@font/beaumarchaisc"
+            android:gravity="center"
+            android:textColor="#0C002C"
+            android:textSize="60sp" />
+
+        <TextView
+            android:id="@+id/result1"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:fontFamily="@font/acme"
+            android:gravity="center"
+            android:textColor="#0C002C"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/result2"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:fontFamily="@font/acme"
+            android:gravity="center"
+            android:textColor="#0C002C"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/result3"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:fontFamily="@font/acme"
+            android:gravity="center"
+            android:textColor="#0C002C"
+            android:textSize="20sp" />
+        <Button
+            android:id="@+id/btnPlayGame"
+            style="@style/BaseButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="30dp"
+            android:layout_weight="0.8"
+            android:text="@string/playGame_button"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>
+

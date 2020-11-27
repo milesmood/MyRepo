@@ -18,16 +18,13 @@ public class RandomNumb {
             input = new BitSet(in);
 
         }
-        public void resetInput(){
-            input.clear();
-        }
 
         public int generate() {
             if (genCount>= this.count)
                 return -1;
             int next;
             do {
-                next = rnd.nextInt(this.count)+1;
+                next = rnd.nextInt(this.count);
             }
             while (input.get(next));
             input.set(next);

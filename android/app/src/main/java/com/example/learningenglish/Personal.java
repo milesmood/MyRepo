@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.learningenglish.models.User;
@@ -28,6 +30,7 @@ public class Personal extends AppCompatActivity {
     private List<String> listData;
     private List<User> userData;
     private DatabaseReference myRef;
+    private Button btnFav;
 
     FirebaseAuth auth;
     private String uid;
@@ -39,12 +42,23 @@ public class Personal extends AppCompatActivity {
         setContentView(R.layout.activity_personal);
 
         listView = findViewById(R.id.list_view);
+        btnFav = findViewById(R.id.btnFav);
         listData = new ArrayList<>();
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listData);
 
         listView.setAdapter(adapter);
 
         getDataFromDB();
+
+        btnFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Personal.this, FavoriteActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
 
     }
 

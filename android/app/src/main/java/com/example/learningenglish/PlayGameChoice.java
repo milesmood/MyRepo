@@ -3,21 +3,22 @@ package com.example.learningenglish;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.learningenglish.models.Connections;
 import com.example.learningenglish.models.Lists;
-import com.example.learningenglish.models.RandomNumb;
-import com.example.learningenglish.models.User;
 import com.example.learningenglish.models.Words;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,16 +29,18 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
+import java.util.prefs.Preferences;
 
-public class PlayGameChoice<listItem> extends AppCompatActivity {
+public class PlayGameChoice extends AppCompatActivity {
     TextView word;
     Button var1, var2, var3, var4, next;
+    ImageButton someBtnId;
     private DatabaseReference myRef;
+
+    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
     private int count = 0;
     FirebaseAuth auth;
@@ -47,7 +50,12 @@ public class PlayGameChoice<listItem> extends AppCompatActivity {
     private ArrayList<Connections> conData = new ArrayList<>();
     private Map<Integer, Integer> conNumber = new HashMap<>();
     private List<Integer> listWordItems = new ArrayList<>();
-    private int counter;
+    private int counter = 0;
+    private int counterTrue = 0;
+    List usedWordList = new ArrayList();
+    int counterTrans = 0;
+    String idList;
+    int wordItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +68,11 @@ public class PlayGameChoice<listItem> extends AppCompatActivity {
         var4 = findViewById(R.id.var4);
         next = findViewById(R.id.next);
         word = findViewById(R.id.word);
+        someBtnId = findViewById(R.id.someBtnId);
+         idList =(String)getIntent().getSerializableExtra("idList");
+        System.out.println("idList "+idList);
         getDataFromDB();
-        for (int f: listWordItems){
-            System.out.println("В списке" +f);
-        }
+
     }
 
 
@@ -85,29 +94,11 @@ public class PlayGameChoice<listItem> extends AppCompatActivity {
                     listData.add(list);
 
                 }
-                for (Lists l : listData) {
-                    System.out.println(l.getId_list());
-                }
-
-                getWordsOneList(listData.get(0).getId_list());
-
-                next.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        counter --;
-                        if (counter == 0){
-                            Toast toast = Toast.makeText(getApplicationContext(),
-                                    "Игра окончена",
-                                    Toast.LENGTH_SHORT);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
-                        } else{
-                            varClick();
-                        }
-                    }
 
 
-                });
+                getWordsOneList(idList);
+
+
             }
 
             @Override
@@ -132,22 +123,34 @@ public class PlayGameChoice<listItem> extends AppCompatActivity {
             case R.id.main_menu:
                 startActivity(new Intent(PlayGameChoice.this, SecondActivity.class));
                 finish();
-                ;
+
                 return true;
             case R.id.back:
-                startActivity(new Intent(PlayGameChoice.this, ChooseGameActivity.class));
+                Intent intent2 = new Intent(PlayGameChoice.this, UserListsActivity.class);
+                intent2.putExtra("activity","1");
+                startActivity(intent2);
                 finish();
-                ;
+
                 return true;
             case R.id.get_result:
-                startActivity(new Intent(PlayGameChoice.this, ChooseGameActivity.class));
+                Intent intent = new Intent(PlayGameChoice.this, ResultActivity.class);
+                intent.putExtra("count",counter);
+                intent.putExtra("countTrue",counterTrue);
+                intent.putExtra("activity","1");
+                startActivity(intent);
+
                 finish();
-                ;
+                conNumber.clear();
+                usedWordList.clear();
+                counter = 0;
+                counterTrue = 0;
+                counterTrans = 0;
+
                 return true;
             case R.id.exitAcc:
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(PlayGameChoice.this, MainActivity.class);
-                startActivity(intent);
+                Intent intents = new Intent(PlayGameChoice.this, MainActivity.class);
+                startActivity(intents);
                 finish();
                 return true;
         }
@@ -164,7 +167,15 @@ public class PlayGameChoice<listItem> extends AppCompatActivity {
                             conData.add(connections);
                         }
                         count = conData.size();
-                        counter = count;
+                        if (count == 0){
+                            System.out.println("зашла сюда " + count);
+                            System.out.println("list size" + wordsList.size());
+                            Toast toast = Toast.makeText(getApplicationContext(),
+                                    "Добавьте слова в список или выберите другой",
+                                    Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                        }
                         for (int i = 0; i < conData.size(); i++) {
                             System.out.println(conData.get(i).getId_word());
 
@@ -177,7 +188,8 @@ public class PlayGameChoice<listItem> extends AppCompatActivity {
                                             System.out.println(count);
                                             if (count == wordsList.size()) {
                                                 if (count >= 4) {
-                                                    varClick();
+                                                    changeWords();
+
                                                 } else {
                                                     System.out.println("зашла сюда " + count);
                                                     System.out.println("list size" + wordsList.size());
@@ -187,8 +199,28 @@ public class PlayGameChoice<listItem> extends AppCompatActivity {
                                                     toast.setGravity(Gravity.CENTER, 0, 0);
                                                     toast.show();
                                                 }
-                                               
+                                                next.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        changeWords();
+                                                    }
+
+
+                                                });
+                                                someBtnId.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        System.out.println(word.getText());
+                                                        preferences.edit().putString("wordFav",word.getText()).apply();
+                                                        Intent intent = new Intent(PlayGameChoice.this, FavoriteActivity.class);
+                                                        intent.putExtra("wordToTranslate",word.getText());
+                                                    }
+
+
+                                                });
+
                                             }
+
                                         }
 
                                         @Override
@@ -208,129 +240,213 @@ public class PlayGameChoice<listItem> extends AppCompatActivity {
                 });
     }
 
-    private void varClick() {
+    private void changeWords() {
+        final Random random = new Random();
+        counterTrans = random.nextInt(10);
 
-        RandomNumb rand = new RandomNumb(count);
-
-
-        int c1 = rand.generate();
-        var1.setText(wordsList.get(c1).getEngWord());
-        int c2 = rand.generate();
-        var2.setText(wordsList.get(c2).getEngWord());
-        int c3 = rand.generate();
-        var3.setText(wordsList.get(c3).getEngWord());
-        int c4 = rand.generate();
-        var4.setText(wordsList.get(c4).getEngWord());
-
+        List example = new ArrayList();
+        int c1 = random.nextInt(count);
+        System.out.println("c1 " + c1);
+        example.add(c1);
+        int c2 = random.nextInt(count);
+        while (example.contains(c2)){
+            c2 = random.nextInt(count);
+        }
+        example.add(c2);
+        System.out.println("c2 " + c2);
+        int c3 = random.nextInt(count);
+        while (example.contains(c3)){
+            c3 = random.nextInt(count);
+        }
+        example.add(c3);
+        System.out.println("c3 " + c3);
+        int c4 = random.nextInt(count);
+        while (example.contains(c4)){
+            c4 = random.nextInt(count);
+        }
+        System.out.println("c4 " + c4);
+        example.clear();
+        if (counterTrans % 2 == 0) {
+            var1.setText(wordsList.get(c1).getEngWord());
+            var2.setText(wordsList.get(c2).getEngWord());
+            var3.setText(wordsList.get(c3).getEngWord());
+            var4.setText(wordsList.get(c4).getEngWord());
+        } else {
+            var1.setText(wordsList.get(c1).getRusWord());
+            var2.setText(wordsList.get(c2).getRusWord());
+            var3.setText(wordsList.get(c3).getRusWord());
+            var4.setText(wordsList.get(c4).getRusWord());
+        }
         conNumber.put(1, c1);
         conNumber.put(2, c2);
         conNumber.put(3, c3);
         conNumber.put(4, c4);
 
-        final Random random = new Random();
-        int variable = 0;
-        int wordItem = rand.generate();
-
-        while (listWordItems.contains(conNumber.get(wordItem)) || (variable != count)){
-            variable++;
-            wordItem = rand.generate();
+        wordItem = random.nextInt(4)+1;
+        int counterItem = count;
+        while (usedWordList.contains(conNumber.get(wordItem)) && (counterItem > 0) ){
+            wordItem = random.nextInt(4)+1;
+            counterItem--;
         }
-
-        if (variable != count) {
-            listWordItems.add(conNumber.get(wordItem));
-            System.out.println("wordItem" + wordItem);
-            word.setText(wordsList.get(conNumber.get(wordItem)).getRusWord());
+        if (counterItem > 0){
+            System.out.println("wordItem " + wordItem);
+            System.out.println("conNumber.get(wordItem) " + conNumber.get(wordItem));
+            System.out.println("conNumber.get(wordItem)).getRusWord()" + wordsList.get(conNumber.get(wordItem)).getEngWord());
+            usedWordList.add(conNumber.get(wordItem));
+            if (counterTrans % 2 == 0) {
+                word.setText(wordsList.get(conNumber.get(wordItem)).getRusWord());
+            } else {
+                word.setText(wordsList.get(conNumber.get(wordItem)).getEngWord());
+            }
             final int wordItem1 = wordItem;
-            var1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    System.out.println(conNumber.get(wordItem1));
-                    if (wordsList.get(conNumber.get(wordItem1)).getEngWord().equals(var1.getText())) {
-                        Toast toast = Toast.makeText(getApplicationContext(),
-                                "Правильно!",
-                                Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-                    } else {
-                        Toast toast = Toast.makeText(getApplicationContext(),
-                                "Не верно!",
-                                Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-                    }
-
-                }
-            });
-            var2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    System.out.println(conNumber.get(wordItem1));
-
-                    if (wordsList.get(conNumber.get(wordItem1)).getEngWord().equals(var2.getText())) {
-                        Toast toast = Toast.makeText(getApplicationContext(),
-                                "Правильно!",
-                                Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-                    } else {
-                        Toast toast = Toast.makeText(getApplicationContext(),
-                                "Не верно!",
-                                Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-                    }
-                }
-            });
-            var3.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    System.out.println(conNumber.get(wordItem1));
-
-                    if (wordsList.get(conNumber.get(wordItem1)).getEngWord().equals(var3.getText())) {
-                        Toast toast = Toast.makeText(getApplicationContext(),
-                                "Правильно!",
-                                Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-                    } else {
-                        Toast toast = Toast.makeText(getApplicationContext(),
-                                "Не верно!",
-                                Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-                    }
-                }
-            });
-            var4.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    System.out.println(conNumber.get(wordItem1));
-
-                    if (wordsList.get(conNumber.get(wordItem1)).getEngWord().equals(var4.getText())) {
-                        Toast toast = Toast.makeText(getApplicationContext(),
-                                "Правильно!",
-                                Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-                    } else {
-                        Toast toast = Toast.makeText(getApplicationContext(),
-                                "Не верно!",
-                                Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-                    }
-                }
-            });
+            clickButtons(wordItem1);
+            counter++;
         } else{
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "Выход",
-                    Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
+            Intent intent = new Intent(PlayGameChoice.this, ResultActivity.class);
+            intent.putExtra("count",counter);
+            intent.putExtra("countTrue",counterTrue);
+            intent.putExtra("activity","1");
+            startActivity(intent);
+
+            finish();
+            conNumber.clear();
+            usedWordList.clear();
+            counter = 0;
+            counterTrue = 0;
+            counterTrans = 0;
+
         }
     }
 
+    private void clickButtons(final int wordItem1){
+        final int[] item = new int[1];
+        item[0] = 0;
+        var1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println(conNumber.get(wordItem1));
+                if (item[0] == 0) {
+                    if (wordsList.get(conNumber.get(wordItem1)).getEngWord().equals(var1.getText()) ||
+                            wordsList.get(conNumber.get(wordItem1)).getRusWord().equals(var1.getText())) {
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "Правильно!",
+                                Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                        counterTrue++;
+                        item[0]++;
+                    } else {
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "Не верно!",
+                                Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                        item[0]++;
+                    }
+                }else{
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Ответ уже был получен",
+                            Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
 
+            }
+        });
+        var2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println(conNumber.get(wordItem1));
+                if (item[0] == 0) {
+                    if (wordsList.get(conNumber.get(wordItem1)).getEngWord().equals(var2.getText()) ||
+                            wordsList.get(conNumber.get(wordItem1)).getRusWord().equals(var2.getText())) {
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "Правильно!",
+                                Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                        counterTrue++;
+                        item[0]++;
+                    } else {
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "Не верно!",
+                                Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                        item[0]++;
+                    }
+                }else{
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Ответ уже был получен",
+                            Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
+            }
+        });
+        var3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println(conNumber.get(wordItem1));
+                if (item[0] == 0) {
+                    if (wordsList.get(conNumber.get(wordItem1)).getEngWord().equals(var3.getText()) ||
+                            wordsList.get(conNumber.get(wordItem1)).getRusWord().equals(var3.getText())) {
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "Правильно!",
+                                Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                        counterTrue++;
+                        item[0]++;
+                    } else {
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "Не верно!",
+                                Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                        item[0]++;
+                    }
+                }else {
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Ответ уже был получен",
+                            Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
+            }
+        });
+        var4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println(conNumber.get(wordItem1));
+                if (item[0] == 0) {
+                    if (wordsList.get(conNumber.get(wordItem1)).getEngWord().equals(var4.getText()) ||
+                            wordsList.get(conNumber.get(wordItem1)).getRusWord().equals(var4.getText())) {
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "Правильно!",
+                                Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                        counterTrue++;
+                        item[0]++;
+                    } else {
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "Не верно!",
+                                Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                        item[0]++;
+                    }
+                } else {
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Ответ уже был получен",
+                            Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
+            }
+        });
+    }
 }
 
 

@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,7 +29,9 @@ public class ChooseGameActivity extends AppCompatActivity {
         oneFour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ChooseGameActivity.this, PlayGameChoice.class));
+                Intent intent = new Intent(ChooseGameActivity.this, UserListsActivity.class);
+                intent.putExtra("activity","1");
+                startActivity(intent);
                 finish();;
             }
         });
@@ -36,8 +39,13 @@ public class ChooseGameActivity extends AppCompatActivity {
         writeAnswer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ChooseGameActivity.this, PlayGame.class));
-                finish();;
+                Intent intent = new Intent(ChooseGameActivity.this, UserListsActivity.class);
+                intent.putExtra("activity","2");
+                startActivity(intent);
+                finish();
+
+                Intent intents = new Intent(ChooseGameActivity.this, ResultActivity.class);
+                intents.putExtra("activity","2");
             }
         });
     }

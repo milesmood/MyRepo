@@ -15,7 +15,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="playGame_button">Играть</string>
     <string name="lk_button">Личный кабинет</string>
-    <string name="add_button">Добавить слова</string>
+    <string name="add_button">Добавить списки</string>
     <string name="back">Назад</string>
     <string name="exitAcc">Выход из аккаунта</string>
 </resources>

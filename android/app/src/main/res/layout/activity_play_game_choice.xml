@@ -29,11 +29,10 @@
             android:id="@+id/word"
             android:layout_width="match_parent"
             android:layout_height="294dp"
-            android:fontFamily="@font/fontdiner_swanky"
+            android:fontFamily="@font/beaumarchaisc"
             android:gravity="center"
-            android:text="TextView"
             android:textColor="#0C002C"
-            android:textSize="30sp" />
+            android:textSize="50sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,8 +50,8 @@
                 android:layout_height="60dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:fontFamily="@font/fontdiner_swanky"
-              
+                android:fontFamily="@font/acme"
+
                 android:textColor="#FFFFFF" />
 
             <Button
@@ -62,7 +61,7 @@
                 android:layout_height="60dp"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
-                android:fontFamily="@font/fontdiner_swanky"
+                android:fontFamily="@font/acme"
                  />
         </LinearLayout>
 
@@ -81,7 +80,7 @@
                 android:layout_height="60dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:fontFamily="@font/fontdiner_swanky"
+                android:fontFamily="@font/acme"
                />
 
             <Button
@@ -91,7 +90,7 @@
                 android:layout_height="60dp"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
-                android:fontFamily="@font/fontdiner_swanky"
+                android:fontFamily="@font/acme"
                  />
         </LinearLayout>
 
