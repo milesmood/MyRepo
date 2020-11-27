@@ -2,6 +2,7 @@ package com.example.learningenglish;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +42,8 @@ public class PlayGameChoice extends AppCompatActivity {
     ImageButton someBtnId;
     private DatabaseReference myRef;
 
-    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+//    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+    ArrayList<String> wordsFav = new ArrayList<>();
 
     private int count = 0;
     FirebaseAuth auth;
@@ -207,13 +210,22 @@ public class PlayGameChoice extends AppCompatActivity {
 
 
                                                 });
+
                                                 someBtnId.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
-                                                        System.out.println(word.getText());
-                                                        preferences.edit().putString("wordFav",word.getText()).apply();
-                                                        Intent intent = new Intent(PlayGameChoice.this, FavoriteActivity.class);
-                                                        intent.putExtra("wordToTranslate",word.getText());
+                                                        String filename = "newfile";
+                                                        String string = word.getText()+" - "+ findByWordName(word.getText())+"\n";                                                        FileOutputStream outputStream;
+
+                                                        try {
+                                                            outputStream = openFileOutput(filename, Context.MODE_APPEND);
+                                                            outputStream.write(string.getBytes());
+                                                            outputStream.close();
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
+
+
                                                     }
 
 
@@ -238,6 +250,21 @@ public class PlayGameChoice extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private CharSequence findByWordName(CharSequence s) {
+        for (Words w : wordsList) {
+            System.out.println("слово "+w.getEngWord());
+            System.out.println("ориг "+s);
+            if (w.getEngWord().equals(s)) {
+                return w.getRusWord();
+            }
+            if (w.getRusWord().equals(s)) {
+                return w.getEngWord();
+            }
+
+        }
+        return s;
     }
 
     private void changeWords() {
