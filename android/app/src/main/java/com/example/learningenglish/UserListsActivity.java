@@ -3,35 +3,43 @@ package com.example.learningenglish;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+
 import android.widget.ListView;
 
 import com.example.learningenglish.models.Lists;
-import com.example.learningenglish.models.User;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class UserListsActivity<onListItemClick> extends AppCompatActivity {
+
+public class UserListsActivity extends AppCompatActivity {
 
     private ListView listView;
     private ArrayAdapter<String> adapter;
     private ArrayList<Lists> listData = new ArrayList<>();
     private ArrayList<String> listName = new ArrayList<>();
     private DatabaseReference myRef;
+;
 
     FirebaseAuth auth;
     private String uid;
@@ -41,15 +49,47 @@ public class UserListsActivity<onListItemClick> extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_lists);
 
-
         listView = findViewById(R.id.list_view);
         listName = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listName);
+        adapter = new ArrayAdapter<>(this, R.layout.list_item, listName);
+
+        registerForContextMenu(listView);
+
 
         listView.setAdapter(adapter);
 
         getDataFromDB();
 
+
+    }
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.edit:
+                editItem(info.position); // метод, выполняющий действие при редактировании пункта меню
+                return true;
+
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+
+
+    private void editItem(int position) {
+        Intent intent = new Intent(this, WordsOneListActivity.class);
+        intent.putExtra("position", position);
+        startActivity(intent);
+        finish();
 
     }
 
@@ -62,7 +102,8 @@ public class UserListsActivity<onListItemClick> extends AppCompatActivity {
         }
 
         myRef = FirebaseDatabase.getInstance().getReference();
-        myRef.child("Lists").orderByChild("usrId").equalTo(uid).addValueEventListener(new ValueEventListener() {
+        Query q = myRef.child("Lists").orderByChild("usrId").equalTo(uid);
+        q.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot listSnapshot : dataSnapshot.getChildren()) {
@@ -71,7 +112,9 @@ public class UserListsActivity<onListItemClick> extends AppCompatActivity {
                     listData.add(list);
                     listName.add(listData.get(listData.size()-1).getListName());
                     adapter.notifyDataSetChanged();
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                   listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
                         public void onItemClick(AdapterView<?> parent, View view,
                                                 int position, long id) {
                             String param = (String)getIntent().getSerializableExtra("activity");

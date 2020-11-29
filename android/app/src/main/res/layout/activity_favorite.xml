@@ -10,10 +10,16 @@
     tools:context=".FavoriteActivity">
 
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="163dp"
+        app:srcCompat="@drawable/vocab" />
+
     <ListView
         android:id="@+id/list_favor"
         android:layout_width="match_parent"
-        android:layout_height="596dp"
+        android:layout_height="568dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

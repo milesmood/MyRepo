@@ -2,10 +2,13 @@ package com.example.learningenglish;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -14,7 +17,13 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -22,11 +31,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FavoriteActivity extends AppCompatActivity {
+    private static final String FILENAME = "newfile";
     private ListView listFavor;
     private ArrayAdapter<String> adapter;
     private ArrayList<String> listName = new ArrayList<>();
     private DatabaseReference myRef;
     private String wordToTranslate;
+    private String text;
 
     FirebaseAuth auth;
     private String uid;
@@ -39,10 +50,37 @@ public class FavoriteActivity extends AppCompatActivity {
 
         listFavor = findViewById(R.id.list_favor);
         listName = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listName);
+        adapter = new ArrayAdapter<>(this, R.layout.list_item, listName);
 
         listFavor.setAdapter(adapter);
         putInList();
+
+        listFavor.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                listName.remove(i);
+
+                adapter.notifyDataSetChanged();
+                FileOutputStream outputStream;
+                File dir = getFilesDir();
+                File file = new File(dir, FILENAME);
+                boolean deleted = file.delete();
+
+                for (String string: listName){
+                    try {
+                        string=string+"\n";
+                        outputStream = openFileOutput(FILENAME, Context.MODE_APPEND);
+                        outputStream.write(string.getBytes());
+                        outputStream.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                return true;
+            }
+
+        });
     }
 
     private void putInList(){
@@ -50,18 +88,16 @@ public class FavoriteActivity extends AppCompatActivity {
        // String wordToTranslate = sharedPreferences.getString("wordFav", "unknown");
         FileInputStream fin = null;
         try {
-            fin = openFileInput("newfile");
+            fin = openFileInput(FILENAME);
             byte[] bytes = new byte[fin.available()];
             fin.read(bytes);
-            String text = new String (bytes);
+            text = new String (bytes);
             Pattern pattern = Pattern.compile("\n");
             String[] strings = pattern.split(text);
             for (String s : strings) {
                 listName.add(s);
                 adapter.notifyDataSetChanged();
             }
-
-
 
         }
         catch(IOException ex) {
@@ -105,4 +141,6 @@ public class FavoriteActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

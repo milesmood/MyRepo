@@ -44,7 +44,7 @@ public class Personal extends AppCompatActivity {
         listView = findViewById(R.id.list_view);
         btnFav = findViewById(R.id.btnFav);
         listData = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listData);
+        adapter = new ArrayAdapter<>(this, R.layout.list_item, listData);
 
         listView.setAdapter(adapter);
 

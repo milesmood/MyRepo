@@ -98,7 +98,6 @@ public class PlayGameChoice extends AppCompatActivity {
 
                 }
 
-
                 getWordsOneList(idList);
 
 
@@ -215,7 +214,8 @@ public class PlayGameChoice extends AppCompatActivity {
                                                     @Override
                                                     public void onClick(View view) {
                                                         String filename = "newfile";
-                                                        String string = word.getText()+" - "+ findByWordName(word.getText())+"\n";                                                        FileOutputStream outputStream;
+                                                        String string = word.getText()+" - "+ findByWordName(word.getText())+"\n";
+                                                        FileOutputStream outputStream;
 
                                                         try {
                                                             outputStream = openFileOutput(filename, Context.MODE_APPEND);

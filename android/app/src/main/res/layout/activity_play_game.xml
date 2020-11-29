@@ -29,10 +29,10 @@
             android:id="@+id/word"
             android:layout_width="match_parent"
             android:layout_height="364dp"
-            android:fontFamily="@font/fontdiner_swanky"
+            android:fontFamily="@font/beaumarchaisc"
             android:gravity="center"
             android:textColor="#0C002C"
-            android:textSize="30sp" />
+            android:textSize="50sp" />
 
 
         <LinearLayout
@@ -53,7 +53,9 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/translate"
                     android:layout_width="match_parent"
-                    android:layout_height="43dp"
+                    android:layout_height="45dp"
+                    android:fontFamily="@font/acme"
+
                     android:background="@color/white"
                     android:hint="Введите перевод"
                     android:textColor="#0C002C" />

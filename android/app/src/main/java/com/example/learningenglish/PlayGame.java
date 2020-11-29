@@ -2,6 +2,7 @@ package com.example.learningenglish;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -9,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +37,7 @@ public class PlayGame extends AppCompatActivity {
     TextView word;
     TextInputEditText translate;
     Button next;
+    ImageButton someBtnId;
     private DatabaseReference myRef;
 
     private int count = 0;
@@ -55,7 +59,7 @@ public class PlayGame extends AppCompatActivity {
         word = findViewById(R.id.word);
         translate = findViewById(R.id.translate);
         next = findViewById(R.id.next);
-
+        someBtnId = findViewById(R.id.someBtnId);
         getDataFromDB();
 
     }
@@ -183,6 +187,26 @@ public class PlayGame extends AppCompatActivity {
 
 
                                                     });
+                                                    someBtnId.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View view) {
+                                                            String filename = "newfile";
+                                                            String string = word.getText()+" - "+ findByWordName(word.getText())+"\n";
+                                                            FileOutputStream outputStream;
+
+                                                            try {
+                                                                outputStream = openFileOutput(filename, Context.MODE_APPEND);
+                                                                outputStream.write(string.getBytes());
+                                                                outputStream.close();
+                                                            } catch (Exception e) {
+                                                                e.printStackTrace();
+                                                            }
+
+
+                                                        }
+
+
+                                                    });
                                                 } else {
                                                     System.out.println("зашла сюда " + count);
                                                     System.out.println("list size" + wordsList.size());
@@ -212,7 +236,20 @@ public class PlayGame extends AppCompatActivity {
                     }
                 });
     }
+    private CharSequence findByWordName(CharSequence s) {
+        for (Words w : wordsList) {
+            System.out.println("слово "+w.getEngWord());
+            System.out.println("ориг "+s);
+            if (w.getEngWord().equals(s)) {
+                return w.getRusWord();
+            }
+            if (w.getRusWord().equals(s)) {
+                return w.getEngWord();
+            }
 
+        }
+        return s;
+    }
     private void changeWords() {
         final Random random = new Random();
         counterTrans = random.nextInt(10);
@@ -257,10 +294,9 @@ public class PlayGame extends AppCompatActivity {
     }
 
     private void translateWord(final int wordItem){
-        System.out.println("переаод" + translate.getText().toString());
-        System.out.println("переаод" + wordsList.get(wordItem).getEngWord());
-        if (wordsList.get(wordItem).getEngWord().equals(translate.getText().toString()) ||
-                wordsList.get(wordItem).getRusWord().equals(translate.getText().toString())) {
+
+        if (wordsList.get(wordItem).getEngWord().equals(translate.getText().toString().toLowerCase()) ||
+                wordsList.get(wordItem).getRusWord().equals(translate.getText().toString().toLowerCase())) {
             Toast toast = Toast.makeText(getApplicationContext(),
                     "Правильно!",
                     Toast.LENGTH_SHORT);
