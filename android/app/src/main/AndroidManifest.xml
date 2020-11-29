@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+
     package="com.example.learningenglish">
 
     <application
@@ -9,19 +10,29 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WordsOneListActivity"></activity>
-        <activity android:name=".FavoriteActivity" />
-        <activity android:name=".UserListsActivity" />
-        <activity android:name=".ResultActivity" />
-        <activity android:name=".PlayGame" />
-        <activity android:name=".PlayGameChoice" />
-        <activity android:name=".Personal" />
-        <activity android:name=".ChooseGameActivity" />
-        <activity android:name=".SecondActivity" />
+        <activity android:name=".WordsOneListActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".FavoriteActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".UserListsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ResultActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".PlayGame"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".PlayGameChoice"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Personal"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ChooseGameActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SecondActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
